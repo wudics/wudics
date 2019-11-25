@@ -359,6 +359,42 @@ height:50vh;
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2019/11/25/ssr-with-caddy-web/" >
+            
+                <span>SSR与CADDY伪装技术</span>
+        </a>
+        <div class="abstract-content">
+            
+SSR流量访问80或443端口时，正常代理转发，而其他流量访问时，分流到CADDY服务。本文以80端口为例，实现伪装功能。
+
+初始化Centos7123456789# 修改系统默认密码passwd# 关闭防火墙systemctl stop firewalld.servicesystemctl disable firewalld.service# 安装git客户端yum install git -y
+
+安装SSR123456789# 下载安装脚本git clone -b master https://github.com/flyzy2005/ss-flycd ss-fly# 安装SSR，...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/11/25</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ssr">ssr</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "caddy">caddy</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2019/08/25/hello-world/" >
             
                 <span>Hello World</span>
@@ -587,9 +623,16 @@ Mo...
     
     
     
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 1
+        Total : 2
         </div>
         <!-- search  -->
         
@@ -605,6 +648,11 @@ Mo...
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2019/11/25/ssr-with-caddy-web/" >SSR与CADDY伪装技术</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">08/25</span><a class="archive-post-title" href= "/2019/08/25/hello-world/" >Hello World</a>
         </li>
     
@@ -612,6 +660,10 @@ Mo...
   </div>
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="ssr"><span class="iconfont-archer">&#xe606;</span>ssr</span>
+    
+        <span class="sidebar-tag-name" data-tags="caddy"><span class="iconfont-archer">&#xe606;</span>caddy</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

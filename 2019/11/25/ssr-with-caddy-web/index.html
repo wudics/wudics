@@ -22,7 +22,7 @@
     <meta name="description" content="编程技术交流博客，欢迎来访">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Hello World · WUDICS&#39; BLOG</title>
+    <title>SSR与CADDY伪装技术 · WUDICS&#39; BLOG</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >WUDICS&#39; BLOG</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">Hello World</a>
+                <a href="#" class="post-name">SSR与CADDY伪装技术</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Hello World
+            SSR与CADDY伪装技术
             <!-- 404 -->
             
         </h1>
@@ -264,14 +264,22 @@ height:50vh;
             <div class="post-intros">
                 <!-- 文章页标签  -->
                 
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ssr">ssr</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "caddy">caddy</a>
+    
+</div>
+                
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">73</span>阅读时长: <span class="post-count reading-time">1 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">445</span>阅读时长: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2019/08/25</span>
+                    <span class="post-intro-time">2019/11/25</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -395,28 +403,43 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+        <blockquote>
+<p>SSR流量访问80或443端口时，正常代理转发，而其他流量访问时，分流到CADDY服务。本文以80端口为例，实现伪装功能。</p>
+</blockquote>
+<h3 id="初始化Centos7"><a href="#初始化Centos7" class="headerlink" title="初始化Centos7"></a>初始化Centos7</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改系统默认密码</span></span><br><span class="line">passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭防火墙</span></span><br><span class="line">systemctl stop firewalld.service</span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld.service</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装git客户端</span></span><br><span class="line">yum install git -y</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<h3 id="安装SSR"><a href="#安装SSR" class="headerlink" title="安装SSR"></a>安装SSR</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载安装脚本</span></span><br><span class="line">git <span class="built_in">clone</span> -b master https://github.com/flyzy2005/ss-fly</span><br><span class="line"><span class="built_in">cd</span> ss-fly</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装SSR，加密chacha20，协议origin，混淆plain</span></span><br><span class="line">./ss-fly.sh -ssr</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装BBR</span></span><br><span class="line">./ss-fly.sh -bbr</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<h3 id="安装CADDY"><a href="#安装CADDY" class="headerlink" title="安装CADDY"></a>安装CADDY</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载安装脚本</span></span><br><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/caddy_install.sh &amp;&amp; chmod +x caddy_install.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装CADDY</span></span><br><span class="line">./caddy_install.sh</span><br><span class="line">./caddy_install.sh install http.filemanager</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<h4 id="Caddy命令说明"><a href="#Caddy命令说明" class="headerlink" title="Caddy命令说明"></a>Caddy命令说明</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动</span></span><br><span class="line">service caddy start</span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止</span></span><br><span class="line">service caddy stop</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启</span></span><br><span class="line">service caddy restart</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看状态</span></span><br><span class="line">service caddy status</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Caddy启动日志</span></span><br><span class="line">tail -f /tmp/caddy.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># Caddy配置文件位置</span></span><br><span class="line">vi /usr/<span class="built_in">local</span>/caddy/Caddyfile</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="CADDY配置"><a href="#CADDY配置" class="headerlink" title="CADDY配置"></a>CADDY配置</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/<span class="built_in">local</span>/caddy/Caddyfile</span><br></pre></td></tr></table></figure>
+
+<p>编辑Caddyfile文件，输入以下配置内容，其中about.wudics.com绑定vps的ip地址，cms.wudics.com是已建设网站。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http://about.wudics.com:888 &#123;</span><br><span class="line">gzip</span><br><span class="line">proxy / http://cms.wudics.com</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="SSR配置"><a href="#SSR配置" class="headerlink" title="SSR配置"></a>SSR配置</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/shadowsocks.json</span><br></pre></td></tr></table></figure>
+
+<p>编辑shadowsocks.json文件，输入以下配置内容，其中server_port设置为80，redirect指向888端口，即当非ssr流量访问80端口时，将会把流量转向888端口，返回网站页面，达到伪装目的。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"server"</span>:<span class="string">"0.0.0.0"</span>,</span><br><span class="line">    <span class="attr">"server_ipv6"</span>:<span class="string">"[::]"</span>,</span><br><span class="line">    <span class="attr">"server_port"</span>:<span class="number">80</span>,</span><br><span class="line">    <span class="attr">"local_address"</span>:<span class="string">"127.0.0.1"</span>,</span><br><span class="line">    <span class="attr">"local_port"</span>:<span class="number">1080</span>,</span><br><span class="line">    <span class="attr">"password"</span>:<span class="string">"cz19900602"</span>,</span><br><span class="line">    <span class="attr">"timeout"</span>:<span class="number">120</span>,</span><br><span class="line">    <span class="attr">"method"</span>:<span class="string">"chacha20"</span>,</span><br><span class="line">    <span class="attr">"protocol"</span>:<span class="string">"origin"</span>,</span><br><span class="line">    <span class="attr">"protocol_param"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="attr">"obfs"</span>:<span class="string">"plain"</span>,</span><br><span class="line">    <span class="attr">"obfs_param"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="attr">"redirect"</span>:[<span class="string">"*:80#127.0.0.1:888"</span>],</span><br><span class="line">    <span class="attr">"dns_ipv6"</span>:<span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"fast_open"</span>:<span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"workers"</span>:<span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="功能测试"><a href="#功能测试" class="headerlink" title="功能测试"></a>功能测试</h3><p>完成以上配置后，重启vps服务器。</p>
+<ul>
+<li><p>待重启完成后，打开浏览器输入about.wudics.com测试网站是否打开正常，网站内容是否与cms.wudics.com一致。</p>
+</li>
+<li><p>打开ssr客户端配置完成后测试是否正常浏览网站。</p>
+</li>
+</ul>
 
     </article>
     <!-- license  -->
     
         <div class="license-wrapper">
             <p>原文作者：<a href="https://blog.wudics.com">猛男村村长</a>
-            <p>原文链接：<a href="https://blog.wudics.com/2019/08/25/hello-world/">https://blog.wudics.com/2019/08/25/hello-world/</a>
-            <p>发表日期：<a href="https://blog.wudics.com/2019/08/25/hello-world/">August 25th 2019, 12:29:40 pm</a>
-            <p>更新日期：<a href="https://blog.wudics.com/2019/08/25/hello-world/">August 25th 2019, 12:29:40 pm</a>
+            <p>原文链接：<a href="https://blog.wudics.com/2019/11/25/ssr-with-caddy-web/">https://blog.wudics.com/2019/11/25/ssr-with-caddy-web/</a>
+            <p>发表日期：<a href="https://blog.wudics.com/2019/11/25/ssr-with-caddy-web/">十一月 25日 2019, 10:04:51 上午</a>
+            <p>更新日期：<a href="https://blog.wudics.com/2019/11/25/ssr-with-caddy-web/">November 25th 2019, 10:42:29 am</a>
             <p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -424,13 +447,13 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href= "/2019/11/25/ssr-with-caddy-web/" title= "SSR与CADDY伪装技术">
-                    <div class="nextTitle">SSR与CADDY伪装技术</div>
-                </a>
-            
         </li>
         <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2019/08/25/hello-world/" title= "Hello World">
+                    <div class="prevTitle">Hello World</div>
+                </a>
             
         </li>
     </ul>
@@ -563,7 +586,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化Centos7"><span class="toc-number">1.</span> <span class="toc-text">初始化Centos7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装SSR"><span class="toc-number">2.</span> <span class="toc-text">安装SSR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装CADDY"><span class="toc-number">3.</span> <span class="toc-text">安装CADDY</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Caddy命令说明"><span class="toc-number">3.1.</span> <span class="toc-text">Caddy命令说明</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置"><span class="toc-number">4.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CADDY配置"><span class="toc-number">4.1.</span> <span class="toc-text">CADDY配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSR配置"><span class="toc-number">4.2.</span> <span class="toc-text">SSR配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#功能测试"><span class="toc-number">5.</span> <span class="toc-text">功能测试</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
